@@ -167,6 +167,24 @@ StreamFormat::StreamFormat(const void *data_, size_t sz)
             type = StreamFormat::Type::PackedAC3;
         }
     }
+    
+        /*ts*/
+        int i = 0;
+        const int scanwindow = /*max(1000, sz - 3 * 188)*/1000;
+        while (i < scanwindow){
+            if (
+                data[i] == 0x47 &&
+                data[i + 188] == 0x47 &&
+                data[i + 2 * 188] == 0x47)
+            {
+                type = StreamFormat::Type::MPEG2TS;
+                break;
+            }
+            else
+            {
+                i++;
+            }
+        }
 }
 
 StreamFormat::~StreamFormat()
